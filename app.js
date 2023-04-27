@@ -18,7 +18,6 @@ const ordersRouter = require('./routes/orders');
 
 
 var app = express();
-app.use('/auth', authRouter);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -46,5 +45,7 @@ app.use('/baskets', basketsRouter);
 app.use('/items', itemsRouter);
 app.use('/users', usersRouter);
 app.use('/orders', ordersRouter);
+app.use('/auth', authRouter);
+
 
 module.exports = app;

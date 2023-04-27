@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
-
+const { authenticate } = require('../middlewares/auth');
 const { User } = require('../models');
 
 // Create a new user 
-router.post('/', async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get all users
-router.get('/', async (req, res) => {
+router.get('/', authenticate, async (req, res) => {
   try {
     const users = await User.findAll(); 
     res.json(users);
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get an specific user by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', authenticate, async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id); 
 
@@ -39,7 +39,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update an user by ID
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
   try {
     const [updated] = await User.update(req.body, {
       where: { id: req.params.id },
@@ -57,7 +57,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete an user by ID
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
   try {
     const deleted = await User.destroy({
       where: { id: req.params.id },

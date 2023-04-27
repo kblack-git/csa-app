@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const { authenticate } = require('../middlewares/auth');
 
 
 // Add your resource-specific routes here
 const { Order, OrderBasket, Basket} = require('../models');
 
 // Create a new item 
-router.post('/', async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   try {
     const order = await Order.create(req.body);
     res.status(201).json(order);
@@ -16,7 +17,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get all orders
-router.get('/', async (req, res) => {
+router.get('/', authenticate, async (req, res) => {
   try {
     const orders = await Order.findAll(); 
     res.json(orders);
@@ -26,7 +27,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get an specific item by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', authenticate, async (req, res) => {
   try {
     const order = await Order.findByPk(req.params.id); 
 
@@ -41,7 +42,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update an order by ID
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
   try {
     const [updated] = await Order.update(req.body, {
       where: { id: req.params.id },
@@ -59,7 +60,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete an order by ID
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
   try {
     const deleted = await Order.destroy({
       where: { id: req.params.id },
